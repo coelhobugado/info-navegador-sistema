@@ -3,37 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informações do Navegador e Sistema</title>
+    <title>Informações do Sistema</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Share Tech Mono', monospace;
+            background-color: #000;
+            color: #0f0;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            margin: 0;
+            overflow-x: hidden;
         }
         .container {
             max-width: 800px;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease, color 0.3s ease;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(0, 20, 0, 0.8);
+            border: 1px solid #0f0;
+            box-shadow: 0 0 10px #0f0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 1s forwards;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
             text-align: center;
+            color: #0f0;
+            text-shadow: 0 0 5px #0f0;
+            animation: glitch 1s infinite;
+        }
+        @keyframes glitch {
+            0%, 14%, 49%, 99% {
+                text-shadow: 0.05em 0 0 #00fffc, -0.05em -0.025em 0 #fc00ff, 0.025em 0.05em 0 #fffc00;
+            }
+            15%, 50% {
+                text-shadow: -0.05em -0.025em 0 #00fffc, 0.025em 0.025em 0 #fc00ff, -0.05em -0.05em 0 #fffc00;
+            }
+            100% {
+                text-shadow: -0.025em 0 0 #00fffc, -0.025em -0.025em 0 #fc00ff, -0.025em -0.05em 0 #fffc00;
+            }
         }
         .info-section {
             margin-bottom: 30px;
+            border: 1px solid #0f0;
+            padding: 15px;
+            background-color: rgba(0, 30, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+        .info-section:hover {
+            box-shadow: 0 0 15px #0f0;
+            transform: scale(1.02);
         }
         .info-section h2 {
-            font-size: 1.5rem;
-            border-bottom: 2px solid #eee;
+            border-bottom: 2px solid #0f0;
             padding-bottom: 10px;
             margin-bottom: 20px;
+            color: #0ff;
         }
         .info-list {
             list-style: none;
@@ -41,102 +72,80 @@
         }
         .info-list li {
             margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 5px;
+            border-left: 3px solid #0f0;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        .info-list li:hover {
+            background-color: rgba(0, 255, 0, 0.1);
+            transform: translateX(5px);
         }
         .info-label {
             font-weight: bold;
             min-width: 180px;
+            display: inline-block;
         }
         .info-value {
-            font-style: italic;
+            color: #ff0;
         }
         .info-value.error {
-            color: #ff6347;
-        }
-        @media (prefers-color-scheme: dark) {
-            body {
-                background-color: #111;
-                color: #eee;
-            }
-            .container {
-                background-color: #222;
-            }
-            h1, .info-section h2, .info-label {
-                color: #eee;
-            }
-            .info-section h2 {
-                border-bottom-color: #444;
-            }
-            .info-value {
-                color: #ddd;
-            }
+            color: #f00;
         }
         @media (max-width: 768px) {
-            body {
+            .container {
                 padding: 10px;
             }
-            .container {
-                padding: 20px;
-            }
             h1 {
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
         }
-        a {
-            color: #007bff;
-            text-decoration: underline;
-            transition: color 0.3s ease;
+        #scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(0deg, rgba(0,255,0,0) 0%, rgba(0,255,0,0.2) 10%, rgba(0,255,0,0.2) 100%);
+            opacity: 0.1;
+            pointer-events: none;
+            animation: scanline 10s linear infinite;
         }
-        a:hover {
-            color: #0056b3;
-        }
-        .info-list li .icon {
-            margin-right: 5px;
-        }
-        .info-list li .icon.error {
-            color: #ff6347;
+        @keyframes scanline {
+            0% {
+                transform: translateY(-100%);
+            }
+            100% {
+                transform: translateY(100vh);
+            }
         }
     </style>
 </head>
 <body>
+    <div id="scanline"></div>
     <div class="container">
-        <h1>Informações do Navegador e Sistema</h1>
-        <div class="info-section">
+        <h1>Informações Confidenciais do Sistema</h1>
+        <div class="info-section" id="browser-info">
             <h2>Navegador</h2>
-            <ul class="info-list">
-                <li><span class="info-label">Seu navegador se parece com:</span> <span id="browserInfo" class="info-value"></span></li>
-                <li><span class="info-label">O JavaScript está habilitado?</span> <span id="jsEnabled" class="info-value"></span></li>
-                <li><span class="info-label">Os cookies estão habilitados?</span> <span id="cookiesEnabled" class="info-value"></span></li>
-                <li><span class="info-label">Os cookies de terceiros estão habilitados?</span> <span id="thirdPartyCookiesEnabled" class="info-value"></span></li>
-                <li><span class="info-label">Idioma do Navegador:</span> <span id="language" class="info-value"></span></li>
-                <li><span class="info-label">Modo Escuro:</span> <span id="darkMode" class="info-value"></span></li>
-                <li><span class="info-label">Tipo de Conexão:</span> <span id="connectionType" class="info-value"></span></li>
-                <li><span class="info-label">Fuso Horário:</span> <span id="timeZone" class="info-value"></span></li>
-                <li><span class="info-label">Touchscreen:</span> <span id="touchScreen" class="info-value"></span></li>
-            </ul>
         </div>
-        <div class="info-section">
+        <div class="info-section" id="system-info">
             <h2>Sistema</h2>
-            <ul class="info-list">
-                <li><span class="info-label">Edição de 64 bits:</span> <span id="bitEdition" class="info-value"></span></li>
-                <li><span class="info-label">Seu referenciador:</span> <span id="referrer" class="info-value"></span></li>
-                <li><span class="info-label">Endereço IP:</span> <span id="ipAddress" class="info-value"></span></li>
-                <li><span class="info-label">Endereço IP local:</span> <span id="localIpAddress" class="info-value"></span></li>
-                <li><span class="info-label">Local:</span> <span id="location" class="info-value"></span></li>
-                <li><span class="info-label">Provedor de Internet:</span> <span id="isp" class="info-value"></span></li>
-                <li><span class="info-label">Tela do computador:</span> <span id="screenResolution" class="info-value"></span></li>
-                <li><span class="info-label">Tamanho da janela do navegador:</span> <span id="windowSize" class="info-value"></span></li>
-                <li><span class="info-label">Configuração Não Rastrear:</span> <span id="doNotTrack" class="info-value"></span></li>
-                <li><span class="info-label">Placa de Vídeo:</span> <span id="gpuName" class="info-value"></span></li>
-            </ul>
         </div>
     </div>
     <script>
-        document.getElementById('browserInfo').textContent = navigator.userAgent;
-        document.getElementById('jsEnabled').textContent = 'Sim - JavaScript está ativado';
-        document.getElementById('cookiesEnabled').textContent = navigator.cookieEnabled ? 'Sim - os cookies estão ativados' : 'Não - os cookies estão desativados';
+        function createInfoItem(parentId, label, value) {
+            const li = document.createElement('li');
+            li.innerHTML = `<span class="info-label">${label}:</span> <span class="info-value">${value}</span>`;
+            const parent = document.getElementById(parentId);
+            if (parent) {
+                parent.appendChild(li);
+                setTimeout(() => {
+                    li.style.opacity = '1';
+                    li.style.transform = 'translateX(0)';
+                }, 50 * parent.children.length);
+            }
+        }
 
         function verificarCookiesDeTerceiros() {
             let cookiesDeTerceirosHabilitados = false;
@@ -147,38 +156,30 @@
             }
             return cookiesDeTerceirosHabilitados ? 'Sim - Cookies de terceiros estão ativados' : 'Não - Cookies de terceiros estão desativados';
         }
-        document.getElementById('thirdPartyCookiesEnabled').textContent = verificarCookiesDeTerceiros();
-        document.getElementById('bitEdition').textContent = navigator.userAgent.includes("WOW64") || navigator.userAgent.includes("Win64") ? 'Sim' : 'Não';
-        document.getElementById('referrer').textContent = document.referrer || 'Sem referenciador';
 
-        document.getElementById('language').textContent = navigator.language || navigator.userLanguage;
-        document.getElementById('darkMode').textContent = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'Ativado' : 'Desativado';
+        createInfoItem('browser-info', 'Seu navegador se parece com', navigator.userAgent);
+        createInfoItem('browser-info', 'O JavaScript está habilitado?', 'Sim - JavaScript está ativado');
+        createInfoItem('browser-info', 'Os cookies estão habilitados?', navigator.cookieEnabled ? 'Sim - os cookies estão ativados' : 'Não - os cookies estão desativados');
+        createInfoItem('browser-info', 'Os cookies de terceiros estão habilitados?', verificarCookiesDeTerceiros());
+        createInfoItem('browser-info', 'Idioma do Navegador', navigator.language || navigator.userLanguage);
+        createInfoItem('browser-info', 'Modo Escuro', window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'Ativado' : 'Desativado');
+        createInfoItem('browser-info', 'Tipo de Conexão', obterTipoDeConexao());
+        createInfoItem('browser-info', 'Fuso Horário', Intl.DateTimeFormat().resolvedOptions().timeZone);
+        createInfoItem('browser-info', 'Touchscreen', 'ontouchstart' in window || navigator.maxTouchPoints > 0 ? 'Sim' : 'Não');
 
-        function obterTipoDeConexao() {
-            if (navigator.connection && navigator.connection.effectiveType) {
-                if (navigator.connection.effectiveType === '4g' && navigator.userAgent.includes('5G')) {
-                    return '5G';
-                }
-                return navigator.connection.effectiveType;
-            } else {
-                return 'Desconhecido';
-            }
-        }
-        document.getElementById('connectionType').textContent = obterTipoDeConexao();
-
-        document.getElementById('timeZone').textContent = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        document.getElementById('touchScreen').textContent = 'ontouchstart' in window || navigator.maxTouchPoints > 0 ? 'Sim' : 'Não';
+        createInfoItem('system-info', 'Edição de 64 bits', navigator.userAgent.includes("WOW64") || navigator.userAgent.includes("Win64") ? 'Sim' : 'Não');
+        createInfoItem('system-info', 'Seu referenciador', document.referrer || 'Sem referenciador');
 
         fetch('https://api.ipify.org?format=json')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('ipAddress').textContent = data.ip;
+                createInfoItem('system-info', 'Endereço IP', data.ip);
                 return fetch(`https://ipapi.co/${data.ip}/json/`);
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('location').textContent = `${data.city}, ${data.region}, ${data.country_name}`;
-                document.getElementById('isp').textContent = data.org;
+                createInfoItem('system-info', 'Local', `${data.city}, ${data.region}, ${data.country_name}`);
+                createInfoItem('system-info', 'Provedor de Internet', data.org);
             });
 
         const RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
@@ -190,7 +191,7 @@
                     const regex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
                     const match = regex.exec(evt.candidate.candidate);
                     if (match) {
-                        document.getElementById('localIpAddress').textContent = match[1];
+                        createInfoItem('system-info', 'Endereço IP local', match[1]);
                         rtc.onicecandidate = () => {};
                     }
                 }
@@ -199,13 +200,23 @@
                 .then(offerDesc => rtc.setLocalDescription(offerDesc))
                 .catch(e => console.warn("Falha na oferta", e));
         } else {
-            document.getElementById('localIpAddress').textContent = 'Detecção bloqueada pelo seu navegador';
-            document.getElementById('localIpAddress').classList.add('error');
+            createInfoItem('system-info', 'Endereço IP local', 'Detecção bloqueada pelo seu navegador');
         }
 
-        document.getElementById('screenResolution').textContent = `${screen.width} x ${screen.height} pixels, ${screen.colorDepth} bits`;
-        document.getElementById('windowSize').textContent = `${window.innerWidth} x ${window.innerHeight} pixels`;
-        document.getElementById('doNotTrack').textContent = navigator.doNotTrack === "1" ? "Ativado" : "Desativado";
+        createInfoItem('system-info', 'Tela do computador', `${screen.width} x ${screen.height} pixels, ${screen.colorDepth} bits`);
+        createInfoItem('system-info', 'Tamanho da janela do navegador', `${window.innerWidth} x ${window.innerHeight} pixels`);
+        createInfoItem('system-info', 'Configuração Não Rastrear', navigator.doNotTrack === "1" ? "Ativado" : "Desativado");
+
+        function obterTipoDeConexao() {
+            if (navigator.connection && navigator.connection.effectiveType) {
+                if (navigator.connection.effectiveType === '4g' && navigator.userAgent.includes('5G')) {
+                    return '5G';
+                }
+                return navigator.connection.effectiveType;
+            } else {
+                return 'Desconhecido';
+            }
+        }
 
         function obterNomeGPU() {
             try {
@@ -220,7 +231,8 @@
             }
             return 'Detecção bloqueada pelo seu navegador';
         }
-        document.getElementById('gpuName').textContent = obterNomeGPU();
+
+        createInfoItem('system-info', 'Placa de Vídeo', obterNomeGPU());
     </script>
 </body>
 </html>
